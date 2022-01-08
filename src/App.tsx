@@ -1,5 +1,7 @@
+import styled from "styled-components";
+
 function App() {
-  return null;
+  return <div />;
 }
 
 export default App;
