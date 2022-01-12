@@ -29,7 +29,10 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 body {
-	line-height: 1;
+	font-weight: 300;
+	line-height: 1.2;
+	background-color: ${(props) => props.theme.bgColor};
+  color: ${(props) => props.theme.textColor};
 }
 ol, ul {
 	list-style: none;
@@ -48,10 +51,6 @@ table {
 }
 *{
   box-sizing: border-box;
-}
-body {
-  background-color: ${(props) => props.theme.bgColor};
-  color: ${(props) => props.theme.textColor};
 }
 a {
   text-decoration: none;
