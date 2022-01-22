@@ -21,10 +21,12 @@ const CoinList = styled.ul``;
 
 const Coin = styled.li`
   background-color: white;
-  color: ${(props) => props.theme.bgColor};
+  color: ${(props) => props.theme.textColor};
+  background-color: ${(props) => props.theme.cardBgColor};
   padding: 20px;
   margin-bottom: 10px;
   border-radius: 15px;
+  border: 1px solid white;
   a {
     transition: color 0.2s ease-in;
     display: flex;
