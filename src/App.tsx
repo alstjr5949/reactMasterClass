@@ -1,4 +1,7 @@
-import { createGlobalStyle } from "styled-components";
+import React from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import styled, { createGlobalStyle } from "styled-components";
+import { hourSelector, minuteState } from "./atoms";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;700&display=swap');
@@ -57,11 +60,40 @@ a {
 }
 `;
 
+const Box = styled.div`
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 function App() {
+  const [minutes, setMinutes] = useRecoilState(minuteState);
+  const [hours, setHours] = useRecoilState(hourSelector);
+  const onMinutesChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setMinutes(+event.currentTarget.value);
+  };
+  const onHoursChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setHours(+event.currentTarget.value);
+  };
   return (
     <>
       <GlobalStyle />
-      <div></div>
+      <Box>
+        <input
+          value={minutes}
+          onChange={onMinutesChange}
+          type="number"
+          placeholder="Minutes"
+        />
+        <input
+          onChange={onHoursChange}
+          value={hours}
+          type="number"
+          placeholder="Hours"
+        />
+      </Box>
     </>
   );
 }
