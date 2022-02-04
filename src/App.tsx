@@ -1,7 +1,9 @@
-import React from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { useRecoilState } from "recoil";
+
 import styled, { createGlobalStyle } from "styled-components";
-import { hourSelector, minuteState } from "./atoms";
+import { toDoState } from "./atoms";
+import Board from "./components/Board";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;700&display=swap');
@@ -34,7 +36,7 @@ body {
 	font-weight: 300;
 	line-height: 1.2;
 	background-color: ${(props) => props.theme.bgColor};
-  color: ${(props) => props.theme.textColor};
+  color: black;
 }
 ol, ul {
 	list-style: none;
@@ -61,39 +63,47 @@ a {
 `;
 
 const Box = styled.div`
+  max-width: 680px;
   width: 100%;
   height: 100vh;
   display: flex;
+  margin: 0 auto;
   justify-content: center;
   align-items: center;
 `;
 
+const Boards = styled.div`
+  display: grid;
+  width: 100%;
+  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+`;
+
 function App() {
-  const [minutes, setMinutes] = useRecoilState(minuteState);
-  const [hours, setHours] = useRecoilState(hourSelector);
-  const onMinutesChange = (event: React.FormEvent<HTMLInputElement>) => {
-    setMinutes(+event.currentTarget.value);
-  };
-  const onHoursChange = (event: React.FormEvent<HTMLInputElement>) => {
-    setHours(+event.currentTarget.value);
+  const [toDos, setToDos] = useRecoilState(toDoState);
+  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+    if (!destination) return;
+    /* setToDos((oldToDos) => {
+      const toDosCopy = [...oldToDos];
+      // 1) Delete item on source.index
+      toDosCopy.splice(source.index, 1);
+      // 2) Put back the item on the destination.index
+      toDosCopy.splice(destination?.index, 0, draggableId);
+      return toDosCopy;
+    }); */
   };
   return (
     <>
       <GlobalStyle />
-      <Box>
-        <input
-          value={minutes}
-          onChange={onMinutesChange}
-          type="number"
-          placeholder="Minutes"
-        />
-        <input
-          onChange={onHoursChange}
-          value={hours}
-          type="number"
-          placeholder="Hours"
-        />
-      </Box>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Box>
+          <Boards>
+            {Object.keys(toDos).map((boardId) => (
+              <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />
+            ))}
+          </Boards>
+        </Box>
+      </DragDropContext>
     </>
   );
 }
