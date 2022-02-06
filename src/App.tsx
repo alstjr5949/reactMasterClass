@@ -1,9 +1,4 @@
-import { DragDropContext, DropResult } from "react-beautiful-dnd";
-import { useRecoilState } from "recoil";
-
 import styled, { createGlobalStyle } from "styled-components";
-import { toDoState } from "./atoms";
-import Board from "./components/Board";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;700&display=swap');
@@ -35,7 +30,7 @@ footer, header, hgroup, menu, nav, section {
 body {
 	font-weight: 300;
 	line-height: 1.2;
-	background-color: ${(props) => props.theme.bgColor};
+	background:linear-gradient(135deg,#e09,#d0e);
   color: black;
 }
 ol, ul {
@@ -62,72 +57,30 @@ a {
 }
 `;
 
-const Box = styled.div`
-  max-width: 800px;
-  width: 100%;
+const Wrapper = styled.div`
+  width: 100vw;
   height: 100vh;
   display: flex;
-  margin: 0 auto;
   justify-content: center;
   align-items: center;
 `;
 
-const Boards = styled.div`
-  display: grid;
-  width: 100%;
-  gap: 10px;
-  grid-template-columns: repeat(3, 1fr);
+const Box = styled.div`
+  width: 200px;
+  height: 200px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
 function App() {
-  const [toDos, setToDos] = useRecoilState(toDoState);
-  const onDragEnd = (info: DropResult) => {
-    const { destination, draggableId, source } = info;
-    if (!destination) return;
-    if (destination?.droppableId === source.droppableId) {
-      // same board movement.
-      setToDos((allBoards) => {
-        const boardCopy = [...allBoards[source.droppableId]];
-        //get toDo obj
-        const taskObj = boardCopy[source.index];
-        // 1) Delete item on source.index
-        boardCopy.splice(source.index, 1);
-        // 2) Put back the item on the destination.index
-        boardCopy.splice(destination?.index, 0, taskObj);
-        return {
-          ...allBoards,
-          [source.droppableId]: boardCopy,
-        };
-      });
-    }
-    if (destination?.droppableId !== source.droppableId) {
-      // cross board movement
-      setToDos((allBoards) => {
-        const sourceBoard = [...allBoards[source.droppableId]];
-        const taskObj = sourceBoard[source.index];
-        const destinationBoard = [...allBoards[destination.droppableId]];
-        sourceBoard.splice(source.index, 1);
-        destinationBoard.splice(destination?.index, 0, taskObj);
-        return {
-          ...allBoards,
-          [source.droppableId]: sourceBoard,
-          [destination.droppableId]: destinationBoard,
-        };
-      });
-    }
-  };
   return (
     <>
       <GlobalStyle />
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Box>
-          <Boards>
-            {Object.keys(toDos).map((boardId) => (
-              <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />
-            ))}
-          </Boards>
-        </Box>
-      </DragDropContext>
+
+      <Wrapper>
+        <Box />
+      </Wrapper>
     </>
   );
 }
