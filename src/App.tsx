@@ -64,7 +64,7 @@ a {
 
 const Wrapper = styled(motion.div)`
   width: 100vw;
-  height: 200vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -80,26 +80,45 @@ const Box = styled(motion.div)`
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
-const boxVariants = {};
+const Svg = styled.svg`
+  width: 300px;
+  height: 200px;
+  path {
+    stroke: black;
+    stroke-width: 1;
+  }
+`;
+
+const svg = {
+  start: { pathLength: 0 },
+  end: { pathLength: 1, transition: { duration: 2 } },
+};
 
 function App() {
-  const x = useMotionValue(0);
-  const rotateZ = useTransform(x, [-800, 800], [-360, 360]);
-  const gradient = useTransform(
-    x,
-    [-800, 800],
-    [
-      "linear-gradient(135deg, rgb(0, 210, 238), rgb(0, 83, 238))",
-      "linear-gradient(135deg, rgb(0, 238, 155), rgb(238, 178, 0))",
-    ]
-  );
-  const { scrollYProgress } = useViewportScroll();
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 3]);
   return (
     <>
       <GlobalStyle />
-      <Wrapper style={{ background: gradient }}>
-        <Box style={{ x, rotateZ, scale }} drag="x" dragSnapToOrigin />
+      <Wrapper>
+        <Svg
+          viewBox="0 0 142 98"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <motion.path
+            variants={svg}
+            initial={"start"}
+            animate={"end"}
+            fill="transparent"
+            d="M95.4452 42.1267C95.4452 42.1267 47.9198 71.6583 21.4034 87.3221C11.8167 93.0089 4.98367 96.8999 4.16778 96.9997C1.00622 97.1992 31.908 3.61582 34.7636 2.4186C37.6192 1.22137 78.7195 -1.27286 74.8441 5.81074C70.9686 12.8943 1.51615 95.8024 1.00622 94.9045C0.496288 94.0066 31.398 48.5119 76.4759 8.10543C76.4759 8.10543 77.9037 6.6089 77.6997 11.9964C77.4957 17.384 81.3712 17.384 83.1049 17.9826C84.8387 18.4814 9.98099 87.1225 7.94127 90.3151C5.90155 93.5078 89.734 18.1821 95.4452 10.6994C95.4452 10.6994 96.3631 8.80382 101.87 9.5022C107.378 10.2006 138.891 8.80382 140.931 11.3978C142.971 13.9918 99.1167 39.9318 99.1167 39.9318"
+          ></motion.path>
+          <motion.path
+            variants={svg}
+            initial={"start"}
+            animate={"end"}
+            fill="transparent"
+            d="M20.4856 87.8205C20.4856 87.8205 86.0626 58.9872 93.2016 56.0939V45.6182"
+          ></motion.path>
+        </Svg>
       </Wrapper>
     </>
   );
