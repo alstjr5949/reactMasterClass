@@ -64,7 +64,7 @@ a {
 
 const Wrapper = styled(motion.div)`
   width: 100vw;
-  height: 100vh;
+  height: 150vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -81,11 +81,11 @@ const Box = styled(motion.div)`
 `;
 
 const Svg = styled.svg`
-  width: 300px;
-  height: 200px;
+  width: 400px;
+  height: 1000px;
   path {
     stroke: black;
-    stroke-width: 1;
+    stroke-width: 3;
   }
 `;
 
@@ -95,28 +95,20 @@ const svg = {
 };
 
 function App() {
+  const { scrollYProgress } = useViewportScroll();
   return (
     <>
       <GlobalStyle />
       <Wrapper>
         <Svg
-          viewBox="0 0 142 98"
+          viewBox="0 0 210 400"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
           <motion.path
-            variants={svg}
-            initial={"start"}
-            animate={"end"}
+            style={{ pathLength: scrollYProgress }}
             fill="transparent"
-            d="M95.4452 42.1267C95.4452 42.1267 47.9198 71.6583 21.4034 87.3221C11.8167 93.0089 4.98367 96.8999 4.16778 96.9997C1.00622 97.1992 31.908 3.61582 34.7636 2.4186C37.6192 1.22137 78.7195 -1.27286 74.8441 5.81074C70.9686 12.8943 1.51615 95.8024 1.00622 94.9045C0.496288 94.0066 31.398 48.5119 76.4759 8.10543C76.4759 8.10543 77.9037 6.6089 77.6997 11.9964C77.4957 17.384 81.3712 17.384 83.1049 17.9826C84.8387 18.4814 9.98099 87.1225 7.94127 90.3151C5.90155 93.5078 89.734 18.1821 95.4452 10.6994C95.4452 10.6994 96.3631 8.80382 101.87 9.5022C107.378 10.2006 138.891 8.80382 140.931 11.3978C142.971 13.9918 99.1167 39.9318 99.1167 39.9318"
-          ></motion.path>
-          <motion.path
-            variants={svg}
-            initial={"start"}
-            animate={"end"}
-            fill="transparent"
-            d="M20.4856 87.8205C20.4856 87.8205 86.0626 58.9872 93.2016 56.0939V45.6182"
+            d="M 76 37 q 1 4 11 -11 q 10 -14 -6 -1 q -2 -7 6 -12 q 7 -12 -8 -1 q -12 23 -12 35 q 1 37 0 31 q 9 29 4 43 q -7 9 -6 19 q -7 -3 -16 -3 q -12 3 -19 -4 q -2 -4 -10 5 q -4 -1 -5 1 q -1 6 1 9 q -10 4 -7 11 q 3 17 20 17 q -1 11 9 10 q 11 1 7 -14 q -1 0 -6 -2 q 7 -1 11 -14 q 3 10 20 20 q 37 15 34 24 q -4 13 -21 22 q -30 20 -54 11 q -12 -3 -7 -16 q 8 -11 63 -13 q 12 -2 34 1 q 30 7 49 20 q 30 15 38 34 q 1 9 -23 12 q -11 2 -54 -8 q -14 -3 -27 -15 q -7 -12 12 -22 q 14 -3 19 21 q 2 5 -14 38 q -21 43 -23 54 q -4 7 -7 57 q 5 17 -3 30 q -15 20 -24 15 q -5 -11 8 -20 q -2 -3 2 -18 q 1 -4 6 -8"
           ></motion.path>
         </Svg>
       </Wrapper>
