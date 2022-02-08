@@ -1,4 +1,9 @@
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useTransform,
+  useViewportScroll,
+} from "framer-motion";
 import styled, { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
@@ -31,7 +36,6 @@ footer, header, hgroup, menu, nav, section {
 body {
 	font-weight: 300;
 	line-height: 1.2;
-	background:linear-gradient(135deg,#e09,#d0e);
   color: black;
 }
 ol, ul {
@@ -58,9 +62,9 @@ a {
 }
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled(motion.div)`
   width: 100vw;
-  height: 100vh;
+  height: 200vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -80,12 +84,22 @@ const boxVariants = {};
 
 function App() {
   const x = useMotionValue(0);
-  const scale = useTransform(x, [-800, 0, 800], [2, 1, 0.1]);
+  const rotateZ = useTransform(x, [-800, 800], [-360, 360]);
+  const gradient = useTransform(
+    x,
+    [-800, 800],
+    [
+      "linear-gradient(135deg, rgb(0, 210, 238), rgb(0, 83, 238))",
+      "linear-gradient(135deg, rgb(0, 238, 155), rgb(238, 178, 0))",
+    ]
+  );
+  const { scrollYProgress } = useViewportScroll();
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 3]);
   return (
     <>
       <GlobalStyle />
-      <Wrapper>
-        <Box style={{ x, scale }} drag="x" dragSnapToOrigin />
+      <Wrapper style={{ background: gradient }}>
+        <Box style={{ x, rotateZ, scale }} drag="x" dragSnapToOrigin />
       </Wrapper>
     </>
   );
