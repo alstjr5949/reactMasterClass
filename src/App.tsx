@@ -1,9 +1,11 @@
 import {
+  AnimatePresence,
   motion,
   useMotionValue,
   useTransform,
   useViewportScroll,
 } from "framer-motion";
+import { useState } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
@@ -64,10 +66,16 @@ a {
 
 const Wrapper = styled(motion.div)`
   width: 100vw;
-  height: 150vh;
+  height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  background: linear-gradient(135deg, #e09, #d0e);
+  button {
+    position: absolute;
+    bottom: 300px;
+  }
 `;
 
 const Box = styled(motion.div)`
@@ -78,39 +86,44 @@ const Box = styled(motion.div)`
   background-color: rgba(255, 255, 255, 1);
   border-radius: 40px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+  margin-bottom: 20px;
 `;
 
-const Svg = styled.svg`
-  width: 400px;
-  height: 1000px;
-  path {
-    stroke: black;
-    stroke-width: 3;
-  }
-`;
-
-const svg = {
-  start: { pathLength: 0 },
-  end: { pathLength: 1, transition: { duration: 2 } },
+const boxVariants = {
+  start: {
+    opacity: 0,
+    scale: 0,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    rotateZ: 360,
+  },
+  leaving: {
+    opacity: 0,
+    scale: 0,
+    y: 50,
+  },
 };
 
 function App() {
-  const { scrollYProgress } = useViewportScroll();
+  const [showing, setShowing] = useState(false);
+  const toggleShowing = () => setShowing((prev) => !prev);
   return (
     <>
       <GlobalStyle />
       <Wrapper>
-        <Svg
-          viewBox="0 0 210 400"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <motion.path
-            style={{ pathLength: scrollYProgress }}
-            fill="transparent"
-            d="M 76 37 q 1 4 11 -11 q 10 -14 -6 -1 q -2 -7 6 -12 q 7 -12 -8 -1 q -12 23 -12 35 q 1 37 0 31 q 9 29 4 43 q -7 9 -6 19 q -7 -3 -16 -3 q -12 3 -19 -4 q -2 -4 -10 5 q -4 -1 -5 1 q -1 6 1 9 q -10 4 -7 11 q 3 17 20 17 q -1 11 9 10 q 11 1 7 -14 q -1 0 -6 -2 q 7 -1 11 -14 q 3 10 20 20 q 37 15 34 24 q -4 13 -21 22 q -30 20 -54 11 q -12 -3 -7 -16 q 8 -11 63 -13 q 12 -2 34 1 q 30 7 49 20 q 30 15 38 34 q 1 9 -23 12 q -11 2 -54 -8 q -14 -3 -27 -15 q -7 -12 12 -22 q 14 -3 19 21 q 2 5 -14 38 q -21 43 -23 54 q -4 7 -7 57 q 5 17 -3 30 q -15 20 -24 15 q -5 -11 8 -20 q -2 -3 2 -18 q 1 -4 6 -8"
-          ></motion.path>
-        </Svg>
+        <AnimatePresence>
+          {showing ? (
+            <Box
+              variants={boxVariants}
+              initial="start"
+              animate="visible"
+              exit="leaving"
+            />
+          ) : null}
+        </AnimatePresence>
+        <button onClick={toggleShowing}>Click</button>
       </Wrapper>
     </>
   );
