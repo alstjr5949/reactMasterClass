@@ -68,28 +68,61 @@ const Wrapper = styled(motion.div)`
   width: 100vw;
   height: 100vh;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
+  flex-direction: column;
   background: linear-gradient(135deg, #e09, #d0e);
 `;
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  height: 60vh;
   width: 50vw;
   gap: 10px;
-  div:first-child,
-  div:last-child {
-    grid-column: span 2;
+  margin-bottom: 20px;
+  & div:first-child {
+    transform-origin: bottom right;
+  }
+  & div:nth-child(2) {
+    transform-origin: bottom left;
+  }
+  & div:nth-child(3) {
+    transform-origin: top right;
+  }
+  & div:last-child {
+    transform-origin: top left;
   }
 `;
 
 const Box = styled(motion.div)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  height: 200px;
-  background-color: rgba(255, 255, 255, 1);
-  border-radius: 40px;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+  height: 100%;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4.6px);
+  -webkit-backdrop-filter: blur(4.6px);
+  border: 1px solid rgba(255, 255, 255, 0.39);
+  position: relative;
+`;
+
+const boxVariants = {
+  hover: {
+    scale: 1.2,
+  },
+};
+
+const Circle = styled(motion.div)`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: white;
+  position: absolute;
 `;
 
 const Overlay = styled(motion.div)`
@@ -103,13 +136,24 @@ const Overlay = styled(motion.div)`
 
 function App() {
   const [id, setId] = useState<string | null>(null);
+  const [clicked, setClicked] = useState(false);
+  const toggle = () => setClicked((prev) => !prev);
   return (
     <>
       <GlobalStyle />
       <Wrapper>
         <Grid>
           {["1", "2", "3", "4"].map((n) => (
-            <Box onClick={() => setId(n)} key={n} layoutId={n} />
+            <Box
+              variants={boxVariants}
+              whileHover="hover"
+              onClick={() => setId(n)}
+              key={n}
+              layoutId={n}
+            >
+              {clicked && n === "2" ? <Circle layoutId="circle" /> : null}
+              {!clicked && n === "3" ? <Circle layoutId="circle" /> : null}
+            </Box>
           ))}
         </Grid>
         <AnimatePresence>
@@ -120,10 +164,11 @@ function App() {
               animate={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
               exit={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
             >
-              <Box layoutId={id} style={{ width: 400, height: 200 }} />
+              <Box layoutId={id} style={{ width: 600, height: 400 }} />
             </Overlay>
           ) : null}
         </AnimatePresence>
+        <button onClick={toggle}>Click</button>
       </Wrapper>
     </>
   );
