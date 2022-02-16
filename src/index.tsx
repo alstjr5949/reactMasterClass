@@ -36,7 +36,8 @@ footer, header, hgroup, menu, nav, section {
 body {
 	font-weight: 300;
 	line-height: 1.2;
-  color: black;
+  color: ${(props) => props.theme.white.darker};
+  background-color: black;
 }
 ol, ul {
 	list-style: none;
