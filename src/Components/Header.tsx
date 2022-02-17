@@ -25,10 +25,6 @@ const Logo = styled(motion.svg)`
   height: 25px;
   margin-right: 50px;
   fill: ${(props) => props.theme.red};
-  path {
-    stroke-width: 8px;
-    stroke: ${(props) => props.theme.red};
-  }
 `;
 
 const Items = styled.ul`
@@ -88,12 +84,6 @@ const logoVariants = {
   normal: {
     fillOpacity: 1,
   },
-  active: {
-    fillOpacity: [0, 1, 0],
-    transition: {
-      repeat: Infinity,
-    },
-  },
 };
 
 const navVariants = {
@@ -126,7 +116,6 @@ function Header() {
       <Col>
         <Logo
           variants={logoVariants}
-          whileHover="active"
           initial="normal"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1024 276.742"
