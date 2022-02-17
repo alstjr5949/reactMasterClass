@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 import { getMovies, IGetMoviesResult } from "../api";
@@ -39,6 +40,7 @@ const Overview = styled.p`
 
 const Slider = styled.div`
   position: relative;
+  top: -100px;
 `;
 
 const Row = styled(motion.div)`
@@ -52,32 +54,55 @@ const Row = styled(motion.div)`
 const Box = styled(motion.div)`
   background-color: white;
   height: 200px;
+  color: black;
+  font-size: 64px;
 `;
+
+const rowVariants = {
+  hidden: {
+    x: window.outerWidth + 10,
+  },
+  visible: {
+    x: 0,
+  },
+  exit: {
+    x: -window.outerWidth - 10,
+  },
+};
 
 function Home() {
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
     getMovies
   );
+  const [index, setIndex] = useState(0);
+  const increaseIndex = () => setIndex((prev) => prev + 1);
   return (
     <Wrapper>
       {isLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <>
-          <Banner bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}>
+          <Banner
+            onClick={increaseIndex}
+            bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}
+          >
             <Title>{data?.results[0].title}</Title>
             <Overview>{data?.results[0].overview}</Overview>
           </Banner>
           <Slider>
             <AnimatePresence>
-              <Row>
-                <Box />
-                <Box />
-                <Box />
-                <Box />
-                <Box />
-                <Box />
+              <Row
+                variants={rowVariants}
+                key={index}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                transition={{ type: "tween", duration: 1 }}
+              >
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <Box key={i}>{i}</Box>
+                ))}
               </Row>
             </AnimatePresence>
           </Slider>
