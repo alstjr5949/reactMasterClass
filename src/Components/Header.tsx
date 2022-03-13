@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { UrlWithStringQuery } from "url";
 
 const Nav = styled(motion.nav)`
   display: flex;
@@ -15,6 +14,7 @@ const Nav = styled(motion.nav)`
   font-size: 16px;
   padding: 20px 60px;
   color: white;
+  z-index: 50;
 `;
 
 const Col = styled.div`
